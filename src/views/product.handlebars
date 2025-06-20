@@ -1,0 +1,43 @@
+<h1>{{producto.title}}</h1>
+
+<p><strong>Descripción:</strong> {{producto.description}}</p>
+<p><strong>Precio:</strong> ${{producto.price}}</p>
+<p><strong>Categoría:</strong> {{producto.category}}</p>
+<p><strong>Stock:</strong> {{producto.stock}}</p>
+
+<!-- Botón para agregar al carrito -->
+<button onclick="agregarAlCarrito('{{producto._id}}')">🛒 Agregar al carrito</button>
+
+<br><br>
+<a href="/products">⬅️ Volver al listado</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const carritoId = '67f015bf08aac840913002ab';
+
+  function agregarAlCarrito(productoId) {
+    fetch(`/api/carts/${carritoId}/products/${productoId}`, {
+      method: 'POST'
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Error al agregar");
+      return response.json();
+    })
+    .then(data => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+        text: 'El producto fue agregado al carrito con éxito',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ups...',
+        text: 'Hubo un problema al agregar el producto'
+      });
+    });
+  }
+</script>
